@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kong
+  namespace: kong
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: kong
+        app: kong
+    spec:
+      containers:
+      - name: kong
+        image: kong
+        env:
+          - name: KONG_PG_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: kong
+                key: POSTGRES_PASSWORD
+          - name: KONG_PG_HOST
+            value: postgres.kong.svc.cluster.local
+          - name: KONG_HOST_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        ports:
+        - name: admin
+          containerPort: 8001
+          protocol: TCP
+        - name: proxy
+          containerPort: 8000
+          protocol: TCP
+        - name: proxy-ssl
+          containerPort: 8443
+          protocol: TCP
+        - name: surf-tcp
+          containerPort: 7946
+          protocol: TCP
+        - name: surf-udp
+          containerPort: 7946
+          protocol: UDP

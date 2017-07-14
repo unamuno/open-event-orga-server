@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  DB_DATABASE: "konga"
+kind: ConfigMap
+metadata:
+  namespace: konga
+  name: konga

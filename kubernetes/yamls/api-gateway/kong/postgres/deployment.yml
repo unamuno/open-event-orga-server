@@ -1,0 +1,31 @@
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: postgres
+  namespace: kong
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.4
+          envFrom:
+          - configMapRef:
+              name: kong
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-data
+      volumes:
+        - name: pg-data
+          gcePersistentDisk:
+            pdName: kong-pg-data-disk
+            fsType: ext4

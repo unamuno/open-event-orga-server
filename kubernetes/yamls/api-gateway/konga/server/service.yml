@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: konga
+  namespace: konga
+spec:
+  ports:
+  - port: 1337
+    protocol: TCP
+    targetPort: 1337
+  selector:
+    app: konga

@@ -1,0 +1,29 @@
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: konga
+  namespace: konga
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: konga
+    spec:
+      containers:
+      - name: konga
+        image: pantsel/konga
+        envFrom:
+        - configMapRef:
+            name: konga
+        env:
+        - name: NODE_ENV
+          value: 'production'
+        - name: DB_ADAPTER
+          value: 'mongo'
+        - name: DB_HOST
+          value: 'mongo.konga.svc.cluster.local'
+        ports:
+        - containerPort: 1337
+          protocol: TCP
+      restartPolicy: Always

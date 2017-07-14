@@ -1,0 +1,28 @@
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: mongodb
+  namespace: konga
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo
+          envFrom:
+          - configMapRef:
+              name: konga
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-data
+      volumes:
+        - name: mongo-data
+          gcePersistentDisk:
+            pdName: konga-mongo-data-disk
+            fsType: ext4
