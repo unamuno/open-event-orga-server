@@ -2,6 +2,12 @@
 
 ## Dependencies required to run Orga Server
 
+* Change Locals
+To enshure the postgres to be utf-8 encoded select the right local setting
+```
+dpkg-reconfigure locales
+```
+
 * Python 2
 * Postgres
 ```sh
